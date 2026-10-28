@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RupeeTrack | Personal Expense Tracker</title>
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Main App Layout -->
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <i class="fa-solid fa-wallet logo-icon"></i>
+          <span class="logo-text">Rupee<span>Track</span></span>
+        </div>
+        <button class="mobile-close-btn" id="close-sidebar-btn" aria-label="Close Sidebar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="nav-item active" data-tab="dashboard">
+            <a href="#dashboard"><i class="fa-solid fa-chart-pie"></i><span>Dashboard</span></a>
+          </li>
+          <li class="nav-item" data-tab="transactions">
+            <a href="#transactions"><i class="fa-solid fa-receipt"></i><span>Transactions</span></a>
+          </li>
+          <li class="nav-item" data-tab="analytics">
+            <a href="#analytics"><i class="fa-solid fa-chart-column"></i><span>Analytics</span></a>
+          </li>
+          <li class="nav-item" data-tab="settings">
+            <a href="#settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-chip">
+          <div class="avatar"><i class="fa-solid fa-user-graduate"></i></div>
+          <div class="user-info">
+            <p class="user-name">Student Account</p>
+            <p class="user-sub">College Project</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Navigation Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle-btn" id="menu-toggle-btn" aria-label="Toggle Navigation">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="date-display">
+            <span id="current-day">Today</span>, 
+            <span id="current-date">October 24, 2026</span>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="btn btn-primary" id="open-modal-btn">
+            <i class="fa-solid fa-plus"></i>
+            <span>Add Transaction</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- View Containers (Tabs) -->
+      <div class="content-wrapper">
+        
+        <!-- ================= DASHBOARD TAB ================= -->
+        <section id="view-dashboard" class="view-panel active">
+          
+          <!-- Summary Cards Row -->
+          <div class="metrics-grid">
+            <div class="metric-card card-balance">
+              <div class="metric-icon">
+                <i class="fa-solid fa-scale-balanced"></i>
+              </div>
+              <div class="metric-data">
+                <h3>Total Balance</h3>
+                <p class="amount" id="card-balance">₹0.00</p>
+                <span class="subtext">Current Available Funds</span>
+              </div>
+            </div>
+
+            <div class="metric-card card-income">
+              <div class="metric-icon">
+                <i class="fa-solid fa-arrow-down"></i>
+              </div>
+              <div class="metric-data">
+                <h3>Total Income</h3>
+                <p class="amount" id="card-income">₹0.00</p>
+                <span class="subtext">All Lifetime Inflows</span>
+              </div>
+            </div>
+
+            <div class="metric-card card-expense">
+              <div class="metric-icon">
+                <i class="fa-solid fa-arrow-up"></i>
+              </div>
+              <div class="metric-data">
+                <h3>Total Expenses</h3>
+                <p class="amount" id="card-expenses">₹0.00</p>
+                <span class="subtext">All Recorded Spending</span>
+              </div>
+            </div>
+
+            <div class="metric-card card-count">
+              <div class="metric-icon">
+                <i class="fa-solid fa-list-check"></i>
+              </div>
+              <div class="metric-data">
+                <h3>Total Records</h3>
+                <p class="amount" id="card-count">0</p>
+                <span class="subtext">Recorded Transactions</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Middle Split: Chart & Quick View -->
+          <div class="dashboard-split">
+            <!-- Expense Category Doughnut Chart -->
+            <div class="card chart-card">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title">Expense Breakdown</h2>
+                  <p class="card-subtitle">Spending grouped by category</p>
+                </div>
+              </div>
+              <div class="card-body chart-body">
+                <div class="chart-container" id="chart-wrapper">
+                  <canvas id="expenseChart"></canvas>
+                  <div id="chart-empty-state" class="empty-chart-state" style="display: none;">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <p>No expense data to display yet</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Transactions Mini Card -->
+            <div class="card recent-card">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title">Recent Activity</h2>
+                  <p class="card-subtitle">Latest 5 financial logs</p>
+                </div>
+                <button class="link-btn" id="see-all-btn">View All</button>
+              </div>
+              <div class="card-body">
+                <ul class="recent-list" id="recent-transactions-list">
+                  <!-- Populated by JavaScript -->
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= TRANSACTIONS TAB ================= -->
+        <section id="view-transactions" class="view-panel">
+          <div class="card">
+            <div class="card-header filters-header">
+              <div>
+                <h2 class="card-title">All Transactions</h2>
+                <p class="card-subtitle">Search, filter, sort, or remove individual records</p>
+              </div>
+              
+              <!-- Filter Controls Toolbar -->
+              <div class="table-toolbar">
+                <div class="search-box">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" id="search-input" placeholder="Search by title..." />
+                </div>
+
+                <div class="select-group">
+                  <select id="type-filter" aria-label="Filter by Type">
+                    <option value="ALL">All Types</option>
+                    <option value="income">Income Only</option>
+                    <option value="expense">Expense Only</option>
+                  </select>
+
+                  <select id="category-filter" aria-label="Filter by Category">
+                    <option value="ALL">All Categories</option>
+                    <option value="Food">Food</option>
+                    <option value="Travel">Travel</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="Education">Education</option>
+                    <option value="Bills">Bills</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Salary">Salary</option>
+                    <option value="Other">Other</option>
+                  </select>
+
+                  <select id="sort-filter" aria-label="Sort Transactions">
+                    <option value="date-desc">Date (Newest First)</option>
+                    <option value="date-asc">Date (Oldest First)</option>
+                    <option value="amount-desc">Amount (High to Low)</option>
+                    <option value="amount-asc">Amount (Low to High)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body table-responsive">
+              <table class="data-table" id="transactions-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th class="text-right">Amount</th>
+                    <th class="text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="transaction-rows">
+                  <!-- Populated by JavaScript -->
+                </tbody>
+              </table>
+
+              <!-- Empty State Container -->
+              <div id="table-empty-state" class="empty-state" style="display: none;">
+                <div class="empty-icon"><i class="fa-solid fa-receipt"></i></div>
+                <h3>No Transactions Found</h3>
+                <p>Try adjusting your search criteria or add your first transaction.</p>
+                <button class="btn btn-primary" onclick="openAddModal()">Add Record</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= ANALYTICS TAB ================= -->
+        <section id="view-analytics" class="view-panel">
+          <div class="analytics-grid">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title">Category Spending Distribution</h2>
+                  <p class="card-subtitle">Visual bar breakdown of your expenses</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="chart-container-large">
+                  <canvas id="categoryBarChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title">Category-Wise Breakdown</h2>
+                  <p class="card-subtitle">Detailed financial distribution table</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="category-summary-list" id="category-summary-container">
+                  <!-- Populated by JavaScript -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= SETTINGS TAB ================= -->
+        <section id="view-settings" class="view-panel">
+          <div class="card settings-card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">Data Management</h2>
+                <p class="card-subtitle">Configure demo information or clear your local browser storage</p>
+              </div>
+            </div>
+            <div class="card-body settings-body">
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h4>Load Sample Data</h4>
+                  <p>Populate the tracker with predefined college student demo data (Income, Groceries, Books, Travel).</p>
+                </div>
+                <button class="btn btn-outline" id="load-sample-btn">
+                  <i class="fa-solid fa-database"></i> Load Sample Data
+                </button>
+              </div>
+
+              <hr class="divider" />
+
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h4>Clear All Records</h4>
+                  <p class="danger-note">Permanently erase all transaction data stored in your browser LocalStorage.</p>
+                </div>
+                <button class="btn btn-danger" id="clear-all-btn">
+                  <i class="fa-solid fa-trash-can"></i> Clear All Data
+                </button>
+              </div>
+
+              <hr class="divider" />
+
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h4>About This Project</h4>
+                  <p>Engineered using pure Semantic HTML5, CSS3 Grid/Flexbox, and Modern ES6 JavaScript. No backend or database required.</p>
+                </div>
+                <div class="badge-group">
+                  <span class="badge">Vanilla JS</span>
+                  <span class="badge">LocalStorage</span>
+                  <span class="badge">Chart.js</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ================= ADD TRANSACTION MODAL ================= -->
+  <div class="modal-backdrop" id="modal-backdrop">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h3 id="modal-title"><i class="fa-solid fa-circle-plus"></i> Add Transaction</h3>
+        <button class="modal-close-btn" id="modal-close-btn" aria-label="Close modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="transaction-form" novalidate>
+        <div class="modal-body">
+          <!-- Type Toggle Selector -->
+          <div class="form-group">
+            <label class="form-label">Transaction Type</label>
+            <div class="type-selector">
+              <label class="radio-tab active" id="tab-expense">
+                <input type="radio" name="tx-type" value="expense" checked />
+                <i class="fa-solid fa-arrow-trend-down"></i> Expense
+              </label>
+              <label class="radio-tab" id="tab-income">
+                <input type="radio" name="tx-type" value="income" />
+                <i class="fa-solid fa-arrow-trend-up"></i> Income
+              </label>
+            </div>
+          </div>
+
+          <!-- Title Field -->
+          <div class="form-group">
+            <label class="form-label" for="tx-title">Title / Description <span class="required">*</span></label>
+            <input type="text" id="tx-title" class="form-control" placeholder="e.g., Grocery Shopping, Semester Books" required />
+            <span class="field-error" id="error-title"></span>
+          </div>
+
+          <!-- Amount Field -->
+          <div class="form-group">
+            <label class="form-label" for="tx-amount">Amount (₹ in INR) <span class="required">*</span></label>
+            <div class="input-with-symbol">
+              <span class="symbol">₹</span>
+              <input type="number" id="tx-amount" class="form-control" placeholder="0.00" step="0.01" min="1" required />
+            </div>
+            <span class="field-error" id="error-amount"></span>
+          </div>
+
+          <!-- Category and Date Row -->
+          <div class="form-row">
+            <div class="form-group half-width">
+              <label class="form-label" for="tx-category">Category <span class="required">*</span></label>
+              <select id="tx-category" class="form-control" required>
+                <!-- Populated dynamically based on Expense vs Income -->
+              </select>
+              <span class="field-error" id="error-category"></span>
+            </div>
+
+            <div class="form-group half-width">
+              <label class="form-label" for="tx-date">Date <span class="required">*</span></label>
+              <input type="date" id="tx-date" class="form-control" required />
+              <span class="field-error" id="error-date"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancel-modal-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="save-tx-btn">
+            <i class="fa-solid fa-check"></i> Save Transaction
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= CONFIRMATION MODAL ================= -->
+  <div class="modal-backdrop" id="confirm-modal-backdrop">
+    <div class="modal-card modal-card-sm" role="dialog" aria-modal="true">
+      <div class="modal-body text-center confirm-body">
+        <div class="warning-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <h3 id="confirm-title">Are you sure?</h3>
+        <p id="confirm-message">This action will permanently delete all records stored in your browser.</p>
+        <div class="modal-actions-inline">
+          <button class="btn btn-secondary" id="confirm-cancel-btn">Cancel</button>
+          <button class="btn btn-danger" id="confirm-ok-btn">Confirm Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
