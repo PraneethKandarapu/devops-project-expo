@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RupeeTrack | Sign In or Register</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="auth.css" />
+</head>
+<body>
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="brand-header">
+        <div class="logo">
+          <i class="fa-solid fa-wallet"></i>
+          <span>Rupee<strong>Track</strong></span>
+        </div>
+        <p class="brand-tagline">Manage your student finances with ease</p>
+      </div>
+
+      <!-- Auth Switch Tabs -->
+      <div class="auth-tabs">
+        <button class="tab-btn active" id="tab-login-btn">Log In</button>
+        <button class="tab-btn" id="tab-signup-btn">Sign Up</button>
+      </div>
+
+      <!-- Error / Alert Banner -->
+      <div id="auth-alert" class="alert-box" style="display: none;"></div>
+
+      <!-- LOGIN FORM -->
+      <form id="login-form" class="auth-form active">
+        <div class="form-group">
+          <label for="login-email">Email Address</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="login-email" placeholder="you@college.edu" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="login-password" placeholder="••••••••" required />
+          </div>
+        </div>
+
+        <button type="submit" class="btn-auth" id="btn-submit-login">
+          <span>Sign In</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </form>
+
+      <!-- SIGNUP FORM
+      <form id="signup-form" class="auth-form">
+        <div class="form-group">
+          <label for="signup-name">Full Name</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" id="signup-name" placeholder="Aarav Sharma" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="signup-email">Email Address</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="signup-email" placeholder="aarav@college.edu" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="signup-institution">College / Organization</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-building-columns"></i>
+            <input type="text" id="signup-institution" placeholder="Delhi Technological University" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="signup-password">Password</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="signup-password" placeholder="Minimum 6 characters" minlength="6" required />
+          </div>
+        </div> -->
+        <!-- SIGNUP FORM -->
+      <form id="signup-form" class="auth-form">
+        <div class="form-group">
+          <label for="signup-name">Full Name</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" id="signup-name" placeholder="Aarav Sharma" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="signup-email">Email Address</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="signup-email" placeholder="aarav@example.com" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="signup-password">Password</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="signup-password" placeholder="Minimum 6 characters" minlength="6" required />
+          </div>
+        </div>
+
+        <button type="submit" class="btn-auth" id="btn-submit-signup">
+          <span>Create Account</span>
+          <i class="fa-solid fa-user-plus"></i>
+        </button>
+      </form>
+
+        <button type="submit" class="btn-auth" id="btn-submit-signup">
+          <span>Create Account</span>
+          <i class="fa-solid fa-user-plus"></i>
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        <i class="fa-solid fa-shield-halved"></i> Data securely stored in MongoDB with BCrypt Encryption.
+      </div>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+</body>
+</html>

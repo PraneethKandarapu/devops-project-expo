@@ -1116,3 +1116,20 @@ body {
     text-transform: uppercase;
   }
 }
+
+/* Sidebar Logout Item */
+.sidebar-nav .nav-logout {
+  margin-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 12px;
+}
+
+.sidebar-nav .nav-logout a {
+  color: #f87171 !important; /* Soft Red */
+  transition: all 0.2s ease;
+}
+
+.sidebar-nav .nav-logout a:hover {
+  background: rgba(239, 68, 68, 0.12) !important;
+  color: #ef4444 !important;
+}
