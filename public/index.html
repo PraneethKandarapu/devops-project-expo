@@ -52,18 +52,15 @@
           <li class="nav-item" data-tab="settings">
             <a href="#settings"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
           </li>
+          <!-- Clean Logout Button in Menu -->
+          <li class="nav-item nav-logout">
+            <a href="#" id="logout-btn">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              <span>Logout</span>
+            </a>
+          </li>
         </ul>
       </nav>
-
-      <div class="sidebar-footer">
-        <div class="user-chip">
-          <div class="avatar"><i class="fa-solid fa-user-graduate"></i></div>
-          <div class="user-info">
-            <p class="user-name">Student Account</p>
-            <p class="user-sub">College Project</p>
-          </div>
-        </div>
-      </div>
     </aside>
 
     <!-- Main Content Area -->
@@ -81,7 +78,13 @@
           </div>
         </div>
 
-        <div class="topbar-actions">
+        <div class="topbar-actions" style="display: flex; align-items: center; gap: 18px;">
+          <!-- Active Logged-in User Info -->
+          <div class="topbar-user" style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #1e293b;">
+            <i class="fa-solid fa-circle-user" style="font-size: 20px; color: #4f46e5;"></i>
+            <span id="user-display-name">Loading...</span>
+          </div>
+
           <button class="btn btn-primary" id="open-modal-btn">
             <i class="fa-solid fa-plus"></i>
             <span>Add Transaction</span>
@@ -289,56 +292,79 @@
 
         <!-- ================= SETTINGS TAB ================= -->
         <section id="view-settings" class="view-panel">
-          <div class="card settings-card">
-            <div class="card-header">
-              <div>
-                <h2 class="card-title">Data Management</h2>
-                <p class="card-subtitle">Configure demo information or clear your local browser storage</p>
+          <div style="display: flex; flex-direction: column; gap: 24px; max-width: 650px; margin: 0 auto;">
+            
+            <!-- 1. Change Password Card -->
+            <div class="card settings-card">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title"><i class="fa-solid fa-lock" style="color: #4f46e5; margin-right: 8px;"></i>Change Password</h2>
+                  <p class="card-subtitle">Ensure your account uses a strong, secure password</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <form id="change-password-form" novalidate style="display: flex; flex-direction: column; gap: 16px;">
+                  <div class="form-group">
+                    <label class="form-label" for="current-pwd">Current Password <span class="required">*</span></label>
+                    <input type="password" id="current-pwd" class="form-control" placeholder="Enter current password" required />
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="new-pwd">New Password <span class="required">*</span></label>
+                    <input type="password" id="new-pwd" class="form-control" placeholder="Minimum 6 characters" minlength="6" required />
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="confirm-pwd">Confirm New Password <span class="required">*</span></label>
+                    <input type="password" id="confirm-pwd" class="form-control" placeholder="Re-enter new password" minlength="6" required />
+                  </div>
+
+                  <div style="margin-top: 6px;">
+                    <button type="submit" class="btn btn-primary" id="save-pwd-btn" style="width: 100%; justify-content: center;">
+                      <i class="fa-solid fa-key"></i> Update Password
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
-            <div class="card-body settings-body">
-              <div class="setting-item">
-                <div class="setting-info">
-                  <h4>Load Sample Data</h4>
-                  <p>Populate the tracker with predefined college student demo data (Income, Groceries, Books, Travel).</p>
+
+            <!-- 2. Data Management Card -->
+            <div class="card settings-card">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title"><i class="fa-solid fa-database" style="color: #4f46e5; margin-right: 8px;"></i>Data Management</h2>
+                  <p class="card-subtitle">Populate demo transactions or reset your account data</p>
                 </div>
-                <button class="btn btn-outline" id="load-sample-btn">
-                  <i class="fa-solid fa-database"></i> Load Sample Data
-                </button>
               </div>
-
-              <hr class="divider" />
-
-              <div class="setting-item">
-                <div class="setting-info">
-                  <h4>Clear All Records</h4>
-                  <p class="danger-note">Permanently erase all transaction data stored in your browser LocalStorage.</p>
+              <div class="card-body settings-body">
+                <!-- Load Sample Data -->
+                <div class="setting-item" style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+                  <div class="setting-info">
+                    <h4>Load Sample Data</h4>
+                    <p style="color: #64748b; font-size: 13px; margin-top: 2px;">Preload your account with realistic starter income and expenses.</p>
+                  </div>
+                  <button class="btn btn-outline" id="load-sample-btn" style="white-space: nowrap;">
+                    <i class="fa-solid fa-cloud-arrow-down"></i> Load Demo Data
+                  </button>
                 </div>
-                <button class="btn btn-danger" id="clear-all-btn">
-                  <i class="fa-solid fa-trash-can"></i> Clear All Data
-                </button>
-              </div>
 
-              <hr class="divider" />
+                <hr class="divider" style="margin: 16px 0; border: none; border-top: 1px solid #e2e8f0;" />
 
-              <div class="setting-item">
-                <div class="setting-info">
-                  <h4>About This Project</h4>
-                  <p>Engineered using pure Semantic HTML5, CSS3 Grid/Flexbox, and Modern ES6 JavaScript. No backend or database required.</p>
-                </div>
-                <div class="badge-group">
-                  <span class="badge">Vanilla JS</span>
-                  <span class="badge">LocalStorage</span>
-                  <span class="badge">Chart.js</span>
+                <!-- Clear All Transactions -->
+                <div class="setting-item" style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+                  <div class="setting-info">
+                    <h4>Clear All Records</h4>
+                    <p style="color: #ef4444; font-size: 13px; margin-top: 2px;">Permanently erase all your transaction records stored in MongoDB.</p>
+                  </div>
+                  <button class="btn btn-danger" id="clear-all-btn" style="white-space: nowrap;">
+                    <i class="fa-solid fa-trash-can"></i> Clear All Data
+                  </button>
                 </div>
               </div>
             </div>
+
           </div>
         </section>
-
-      </div>
-    </main>
-  </div>
 
   <!-- ================= ADD TRANSACTION MODAL ================= -->
   <div class="modal-backdrop" id="modal-backdrop">
@@ -418,7 +444,7 @@
       <div class="modal-body text-center confirm-body">
         <div class="warning-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
         <h3 id="confirm-title">Are you sure?</h3>
-        <p id="confirm-message">This action will permanently delete all records stored in your browser.</p>
+        <p id="confirm-message">This action will permanently delete all records stored in your MongoDB database.</p>
         <div class="modal-actions-inline">
           <button class="btn btn-secondary" id="confirm-cancel-btn">Cancel</button>
           <button class="btn btn-danger" id="confirm-ok-btn">Confirm Delete</button>
@@ -427,7 +453,7 @@
     </div>
   </div>
 
-  <!-- Custom JavaScript -->
+  <!-- Custom JavaScript Connected to MongoDB -->
   <script src="script.js"></script>
 </body>
 </html>
